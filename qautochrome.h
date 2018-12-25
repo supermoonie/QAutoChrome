@@ -5,6 +5,10 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
+#include <QtWebSockets/QWebSocket>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class QAutoChrome : public QObject
 {
@@ -18,10 +22,12 @@ private:
     QNetworkReply *reply;
     QString webSocketDebuggerUrl;
     QString targetId;
+    QWebSocket* webSocket;
 
 signals:
 
 public slots:
+    void onReplyFinished();
 };
 
 #endif // QAUTOCHROME_H

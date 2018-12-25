@@ -8,10 +8,7 @@ QAutoChrome::QAutoChrome(QString host, int port, QObject *parent) : QObject(pare
     qDebug() << url;
     request.setUrl(QUrl(url));
     reply = manager->get(request);
-    connect(reply, &QNetworkReply::readyRead, [=](){
-        QString jsonText = QString(reply->readAll());
-        qDebug() << jsonText;
-    });
+    connect(reply, &QNetworkReply::finished, this, &QAutoChrome::onReplyFinished);
     connect(reply, &QNetworkReply::finished, [=](){
         reply->deleteLater();
         reply = 0;
@@ -23,3 +20,24 @@ QAutoChrome::~QAutoChrome()
 
 }
 
+void QAutoChrome::onReplyFinished() {
+    QString jsonText = QString(reply->readAll());
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonText.toUtf8());
+    QJsonArray tabArray = jsonDoc.array();
+    for(int i = 0; i < tabArray.size(); i ++) {
+        QJsonObject tabJson = tabArray.at(i).toObject();
+        if (tabJson.value("type").toString() == "page" &&
+                tabJson.value("url").toString() == "about:blank") {
+            webSocketDebuggerUrl = tabJson.value("webSocketDebuggerUrl").toString();
+            targetId = tabJson.value("id").toString();
+            webSocket = new QWebSocket(webSocketDebuggerUrl, QWebSocketProtocol::Version13, this);
+            connect(webSocket, &QWebSocket::connected, [=](){
+                qDebug() << "websocket connected";
+            });
+            connect(webSocket, &QWebSocket::disconnected, [=](){
+                qDebug() << "websocket disconnected";
+            });
+            break;
+        }
+    }
+}
