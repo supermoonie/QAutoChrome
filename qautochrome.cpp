@@ -30,13 +30,16 @@ void QAutoChrome::onReplyFinished() {
                 tabJson.value("url").toString() == "about:blank") {
             webSocketDebuggerUrl = tabJson.value("webSocketDebuggerUrl").toString();
             targetId = tabJson.value("id").toString();
-            webSocket = new QWebSocket(webSocketDebuggerUrl, QWebSocketProtocol::Version13, this);
+            webSocket = new QWebSocket(QString(), QWebSocketProtocol::Version13, this);
             connect(webSocket, &QWebSocket::connected, [=](){
                 qDebug() << "websocket connected";
             });
             connect(webSocket, &QWebSocket::disconnected, [=](){
                 qDebug() << "websocket disconnected";
+                webSocket->deleteLater();
+                webSocket = 0;
             });
+            webSocket->open(QUrl(webSocketDebuggerUrl));
             break;
         }
     }

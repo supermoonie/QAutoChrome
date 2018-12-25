@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMouseEvent>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +19,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *e);
+
+signals:
+    void lineEditClicked();
+
 };
 
 #endif // MAINWINDOW_H

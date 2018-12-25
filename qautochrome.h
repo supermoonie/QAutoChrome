@@ -27,7 +27,10 @@ private:
 signals:
 
 public slots:
+
+private slots:
     void onReplyFinished();
+
 };
 
 #endif // QAUTOCHROME_H
