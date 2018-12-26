@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include <QFileDialog>
+#include "qautochrome.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QAutoChrome* autoChrome;
 
 protected:
     bool eventFilter(QObject *obj, QEvent *e);
@@ -26,6 +28,8 @@ protected:
 signals:
     void lineEditClicked();
 
+private slots:
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -9,20 +9,29 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "launcher.h"
 
 class QAutoChrome : public QObject
 {
     Q_OBJECT
 public:
-    explicit QAutoChrome(QString host = "127.0.0.1", int port = 9222, QObject *parent = 0);
+    explicit QAutoChrome(QObject *parent = 0);
     ~QAutoChrome();
+    bool setChromePath(QString & chromePath);
+    bool setHost(QString host = "127.0.0.1");
+    bool setPort(int port = 9222);
+    void start();
 
 private:
+    QString chromePath;
+    QString host;
+    int port;
     QNetworkAccessManager* manager;
     QNetworkReply *reply;
     QString webSocketDebuggerUrl;
     QString targetId;
     QWebSocket* webSocket;
+    Launcher* launcher;
 
 signals:
 

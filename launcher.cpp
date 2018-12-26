@@ -10,7 +10,7 @@ Launcher::Launcher(QString path, int port, QStringList otherArgs, QObject *paren
     args << QString("--remote-debugging-port=%1").arg(port) << DEFAULT_ARGS << otherArgs;
     chromeProcess->setArguments(args);
     chromeProcess->start(path, args, QIODevice::NotOpen);
-    chromeProcess->waitForStarted();
+    chromeProcess->waitForStarted(-1);
 }
 
 QStringList Launcher::DEFAULT_ARGS = QStringList()

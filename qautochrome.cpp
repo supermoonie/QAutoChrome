@@ -1,7 +1,43 @@
 #include "qautochrome.h"
 
-QAutoChrome::QAutoChrome(QString host, int port, QObject *parent) : QObject(parent)
+QAutoChrome::QAutoChrome(QObject *parent) : QObject(parent),
+  host("127.0.0.1"),
+  port(9222)
 {
+
+}
+
+QAutoChrome::~QAutoChrome()
+{
+
+}
+
+bool QAutoChrome::setChromePath(QString &chromePath) {
+    if(chromePath.isNull() || chromePath.isEmpty()) {
+        return false;
+    }
+    this->chromePath = chromePath;
+    return true;
+}
+
+bool QAutoChrome::setHost(QString host) {
+    if(host.isNull() || host.isNull()) {
+        return false;
+    }
+    this->host = host;
+    return true;
+}
+
+bool QAutoChrome::setPort(int port) {
+    if(port <= 0) {
+        return false;
+    }
+    this->port = port;
+    return true;
+}
+
+void QAutoChrome::start() {
+    launcher = new Launcher(this->chromePath, port, QStringList(), this);
     manager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     QString url = QString("http://%1:%2/json").arg(host).arg(port);
@@ -9,15 +45,6 @@ QAutoChrome::QAutoChrome(QString host, int port, QObject *parent) : QObject(pare
     request.setUrl(QUrl(url));
     reply = manager->get(request);
     connect(reply, &QNetworkReply::finished, this, &QAutoChrome::onReplyFinished);
-    connect(reply, &QNetworkReply::finished, [=](){
-        reply->deleteLater();
-        reply = 0;
-    });
-}
-
-QAutoChrome::~QAutoChrome()
-{
-
 }
 
 void QAutoChrome::onReplyFinished() {
@@ -43,4 +70,6 @@ void QAutoChrome::onReplyFinished() {
             break;
         }
     }
+    reply->deleteLater();
+    reply = 0;
 }

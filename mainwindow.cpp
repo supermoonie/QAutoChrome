@@ -4,7 +4,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    autoChrome(0)
 {
     ui->setupUi(this);
     ui->lineEdit->installEventFilter(this);
@@ -48,4 +49,15 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         }
     }
     return QMainWindow::eventFilter(obj,e);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString path = ui->lineEdit->text();
+    if(path.isEmpty()) {
+        return;
+    }
+    autoChrome = new QAutoChrome(this);
+    autoChrome->setChromePath(path);
+    autoChrome->start();
 }
