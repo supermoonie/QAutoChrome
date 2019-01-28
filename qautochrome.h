@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QAtomicInteger>
 #include "launcher.h"
 
 class QAutoChrome : public QObject
@@ -21,13 +22,13 @@ public:
     bool setHost(QString host = "127.0.0.1");
     bool setPort(int port = 9222);
     void start();
+    QJsonObject send(QJsonObject& json);
 
 private:
+    QAtomicInteger<qint64>* count;
     QString chromePath;
     QString host;
     int port;
-    QNetworkAccessManager* manager;
-    QNetworkReply *reply;
     QString webSocketDebuggerUrl;
     QString targetId;
     QWebSocket* webSocket;
@@ -38,7 +39,6 @@ signals:
 public slots:
 
 private slots:
-    void onReplyFinished();
 
 };
 

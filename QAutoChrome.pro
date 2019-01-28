@@ -17,11 +17,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     page.cpp \
     launcher.cpp \
-    qautochrome.cpp
+    qautochrome.cpp \
+    websocketadapter.cpp \
+    websocketcontext.cpp
 
 HEADERS  += mainwindow.h \
     page.h \
     launcher.h \
-    qautochrome.h
+    qautochrome.h \
+    websocketadapter.h \
+    websocketcontext.h
 
 FORMS    += mainwindow.ui
