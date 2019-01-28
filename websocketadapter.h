@@ -12,6 +12,9 @@ public:
     explicit WebSocketAdapter(const QString &origin = QString(), QWebSocketProtocol::Version version = QWebSocketProtocol::VersionLatest, QObject *parent = nullptr);
     ~WebSocketAdapter();
 
+private:
+
+
 signals:
 
 public slots:
